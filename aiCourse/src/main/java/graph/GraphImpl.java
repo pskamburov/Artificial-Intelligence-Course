@@ -3,6 +3,17 @@ package graph;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of graph, using adjacency table to represent nodes and edges.
+ * The first element of each list is the node, and the elements after that are
+ * the nodes that it is connected to. For example, a graph: (1,2), (1,3), (2,3)
+ * will be represented as List{ List{1, 2, 3}, List{2,3} }
+ * 
+ * @author petar
+ *
+ * @param <T>
+ *            - type of the nodes
+ */
 public class GraphImpl<T> implements Graph<T> {
 
 	private List<List<T>> adjacencyTable;
@@ -13,7 +24,7 @@ public class GraphImpl<T> implements Graph<T> {
 
 	public boolean existsNode(T node) {
 		for (List<T> neighbors : adjacencyTable) {
-			if (neighbors.contains(node)) {
+			if (neighbors.get(0).equals(node)) {
 				return true;
 			}
 		}
@@ -53,17 +64,22 @@ public class GraphImpl<T> implements Graph<T> {
 	 * 
 	 */
 	public void addNode(T parentNode, T node) {
+		createNodeIfMissing(parentNode);
+		createNodeIfMissing(node);
 		for (List<T> neighbors : adjacencyTable) {
 			if (neighbors.get(0).equals(parentNode)) {
 				neighbors.add(node);
 				return;
 			}
 		}
-		// parentNode doesn't exist
-		List<T> newNode = new ArrayList<T>();
-		newNode.add(parentNode);
-		newNode.add(node);
-		adjacencyTable.add(newNode);
+	}
+
+	private void createNodeIfMissing(T parentNode) {
+		if (!existsNode(parentNode)) {
+			List<T> newNode = new ArrayList<T>();
+			newNode.add(parentNode);
+			adjacencyTable.add(newNode);
+		}
 	}
 
 	/**

@@ -26,12 +26,9 @@ public class GraphTest {
 	public void testInitialization() throws Exception {
 
 		List<Integer> expectedNodes = new ArrayList<Integer>(Arrays.asList(1,
-				3, 4));
+				2, 3, 4, 5));
 
 		assertEquals(expectedNodes, GRAPH.getAllNodes());
-
-		System.out.println(GRAPH);
-
 	}
 
 	@Test
