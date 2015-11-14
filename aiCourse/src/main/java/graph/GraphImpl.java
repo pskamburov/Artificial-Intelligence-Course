@@ -7,6 +7,10 @@ public class GraphImpl<T> implements Graph<T> {
 
 	private List<List<T>> adjacencyTable;
 
+	public GraphImpl() {
+		adjacencyTable = new ArrayList<List<T>>();
+	}
+
 	public boolean existsNode(T node) {
 		for (List<T> neighbors : adjacencyTable) {
 			if (neighbors.contains(node)) {
@@ -16,6 +20,11 @@ public class GraphImpl<T> implements Graph<T> {
 		return false;
 	}
 
+	/**
+	 * Get all nodes in the graph.
+	 * 
+	 * return - List of all nodes.
+	 */
 	public List<T> getAllNodes() {
 		List<T> allNodes = new ArrayList<T>();
 		for (List<T> neighbors : adjacencyTable) {
@@ -24,33 +33,72 @@ public class GraphImpl<T> implements Graph<T> {
 		return allNodes;
 	}
 
+	/**
+	 * Get the Neighbors of a node.
+	 * 
+	 * return - List of all neighbors, or empty list if there aren't any
+	 */
 	public List<T> getNeighborNodes(T node) {
 		for (List<T> neighbors : adjacencyTable) {
 			if (neighbors.get(0).equals(node)) {
 				return new ArrayList<T>(neighbors.subList(1, neighbors.size()));
 			}
 		}
-		return null;
+		return new ArrayList<T>();
 	}
 
-	public boolean addNode(T node, T parentNode) {
+	/**
+	 * Add node in the graph(Add edge between parentNode and node). If the
+	 * parentNode does not exists, it is created.
+	 * 
+	 */
+	public void addNode(T parentNode, T node) {
 		for (List<T> neighbors : adjacencyTable) {
 			if (neighbors.get(0).equals(parentNode)) {
 				neighbors.add(node);
-				return true;
+				return;
 			}
 		}
-		return false;
+		// parentNode doesn't exist
+		List<T> newNode = new ArrayList<T>();
+		newNode.add(parentNode);
+		newNode.add(node);
+		adjacencyTable.add(newNode);
 	}
 
-	public boolean deleteNode(T node) {
+	/**
+	 * Delete node.
+	 */
+	public void deleteNode(T node) {
+		// remove the node and all edges that come from it
 		for (List<T> neighbors : adjacencyTable) {
 			if (neighbors.get(0).equals(node)) {
-				neighbors.remove(node);
-				return true;
+				adjacencyTable.remove(neighbors);
+				break;
 			}
 		}
-		return false;
+		// remove all edges that are connected to the node.
+		for (List<T> neighbors : adjacencyTable) {
+			List<T> nodeToRemove = new ArrayList<T>();
+			nodeToRemove.add(node);
+			neighbors.removeAll(nodeToRemove);
+		}
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder message = new StringBuilder();
+		for (List<T> nodes : adjacencyTable) {
+			message.append(nodes.get(0));
+			message.append(" : ");
+			for (T node : nodes.subList(1, nodes.size())) {
+				message.append(node + ", ");
+			}
+			// delete the last ','
+			message.deleteCharAt(message.length() - 2);
+			message.append(System.lineSeparator());
+		}
+		return message.toString();
 	}
 
 }
