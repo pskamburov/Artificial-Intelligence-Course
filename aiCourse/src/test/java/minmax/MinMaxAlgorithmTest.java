@@ -1,4 +1,4 @@
-package graphAlgorithms;
+package minmax;
 
 import static org.junit.Assert.*;
 import graph.Graph;
