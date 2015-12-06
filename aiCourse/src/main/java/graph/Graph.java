@@ -10,7 +10,7 @@ public interface Graph<T> {
 
 	List<T> getNeighborNodes(T node);
 
-	void addNode(T node, T parentNode);
+	void addNode(T parent, T node);
 
 	void deleteNode(T node);
 
