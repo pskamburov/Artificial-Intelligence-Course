@@ -2,8 +2,8 @@ package minmax;
 
 public class NodeMinMaxValue<T> {
 
-	int value;
-	T node;
+	private int value;
+	private T node;
 
 	public NodeMinMaxValue(T node) {
 		this.node = node;
@@ -25,8 +25,7 @@ public class NodeMinMaxValue<T> {
 
 	@Override
 	public String toString() {
-		return String
-				.format("[node=%s, value=%s]", node, value);
+		return String.format("[node=%s, value=%s]", node, value);
 	}
 
 }

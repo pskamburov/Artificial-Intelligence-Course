@@ -9,7 +9,7 @@ import graph.Graph;
 
 public class MinMaxAlgorithm<T> {
 
-	public Graph<NodeMinMaxValue<T>> minMaxTree;
+	private Graph<NodeMinMaxValue<T>> minMaxTree;
 
 	public MinMaxAlgorithm(Graph<NodeMinMaxValue<T>> minMaxTree) {
 		this.minMaxTree = minMaxTree;
@@ -41,7 +41,7 @@ public class MinMaxAlgorithm<T> {
 		return value;
 	}
 
-	List<NodeMinMaxValue<T>> generateMinMaxPath(NodeMinMaxValue<T> rootNode,
+	private List<NodeMinMaxValue<T>> generateMinMaxPath(NodeMinMaxValue<T> rootNode,
 			boolean isMaxOnTurn) {
 		List<NodeMinMaxValue<T>> minMaxPath = new ArrayList<NodeMinMaxValue<T>>();
 		NodeMinMaxValue<T> currentNode = rootNode;
