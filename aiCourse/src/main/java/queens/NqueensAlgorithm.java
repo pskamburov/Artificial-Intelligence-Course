@@ -3,19 +3,30 @@ package queens;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 public class NqueensAlgorithm {
-	private static final char EMPTY_MARK = '.';
+
+	public static final char EMPTY_MARK = '.';
+	public static final char QUEEN_MARK = 'Q';
 	/**
 	 * In some cases the algorithm gets stuck, so we need to shuffle the queens
-	 * on the board. When the iterations limit is exceeded, the algorithm
+	 * on the board. When the <b>ITERATIONS_LIMIT</b> is exceeded, the algorithm
 	 * shuffle the queens, and starts again.
 	 */
-	private static final int ITERATIONS_LIMIT = 1_000_000;
-	private static final char QUEEN_MARK = 'Q';
+	private static final int ITERATIONS_LIMIT = 100_000;
 
+	/**
+	 * Represents the queens on the board.(their positions)
+	 */
 	private List<Queen> queens;
-	private long iterations;
+
+	private long iterations;// iterations during the execution
+
+	/**
+	 * The size of the queens list. It is extracted as a new field for
+	 * performance reasons.
+	 */
 	private int boardSize;
 
 	public NqueensAlgorithm(char[][] board) {
@@ -30,16 +41,22 @@ public class NqueensAlgorithm {
 		boardSize = queens.size();
 	}
 
-	public char[][] execute() {
+	/**
+	 * Finds a solution.
+	 * 
+	 * @return
+	 */
+	public char[][] solve() {
+		Random random = new Random();
 		while (true) {
 			if (foundSolution()) {
 				break;
 			}
 			if (iterations++ >= ITERATIONS_LIMIT) {
+				iterations = 0;
 				shuffle();
 			}
-			int randomColumnIndex = (int) (Math.random() * boardSize);
-			setQueenToMinConflictPosition(queens.get(randomColumnIndex));
+			setQueenToMinConflictPosition(queens.get(random.nextInt(boardSize)));
 		}
 		// The solution is found. Now generating the board from the queens.
 		return generateBoard();
@@ -49,6 +66,13 @@ public class NqueensAlgorithm {
 		return iterations;
 	}
 
+	/**
+	 * The total number of conflicts between <b>currentQueen</b> and all other
+	 * queens.
+	 * 
+	 * @param currentQueen
+	 * @return
+	 */
 	private int numberOfConfilcts(Queen currentQueen) {
 		int conflicts = 0;
 		for (Queen queen : queens) {
@@ -63,6 +87,11 @@ public class NqueensAlgorithm {
 		return --conflicts;
 	}
 
+	/**
+	 * Check if there are no conflicts between the queens on the board.
+	 * 
+	 * @return
+	 */
 	private boolean foundSolution() {
 		for (Queen queen : queens) {
 			if (numberOfConfilcts(queen) != 0) {
@@ -73,6 +102,11 @@ public class NqueensAlgorithm {
 
 	}
 
+	/**
+	 * The state of the boards sometimes gets stuck and produces the same
+	 * positions. So this function "restart" the board.(place all queens
+	 * randomly - but one per a column)
+	 */
 	private void shuffle() {
 		for (Queen queen : queens) {
 			int randomColumnIndex = (int) (Math.random() * boardSize);
@@ -80,6 +114,11 @@ public class NqueensAlgorithm {
 		}
 	}
 
+	/**
+	 * Generates the board after we know the queens positions.
+	 * 
+	 * @return
+	 */
 	private char[][] generateBoard() {
 		char[][] board = new char[boardSize][boardSize];
 		for (char[] cs : board) {
@@ -91,6 +130,11 @@ public class NqueensAlgorithm {
 		return board;
 	}
 
+	/**
+	 * Finds the best position of a queen in her column.
+	 * 
+	 * @param queen
+	 */
 	private void setQueenToMinConflictPosition(Queen queen) {
 		int minConflicts = numberOfConfilcts(queen);
 		int minConflictPositionY = 0;
@@ -116,7 +160,10 @@ class Queen {
 	}
 
 	public boolean isInConfilct(Queen queen) {
-		/* Check row and column */
+		/*
+		 * Check row and column(actually in my case the column check is not
+		 * necessary since we start with one queen per column)
+		 */
 		if (x == queen.getX() || y == queen.getY()) {
 			return true;
 		}
