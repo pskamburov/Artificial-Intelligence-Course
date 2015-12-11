@@ -7,20 +7,46 @@ import java.util.List;
 
 import graph.Graph;
 
+/**
+ * Òhis class represents the MinMaxAlgorithm. Lets say we play a game, and we
+ * have a tree of all possible states. We will find the optimal play,
+ * considering both players are playing best possible way.
+ * 
+ * @author petar
+ *
+ * @param <T>
+ */
 public class MinMaxAlgorithm<T> {
 
+	/**
+	 * The tree of all possible states of the game.
+	 */
 	private Graph<NodeMinMaxValue<T>> minMaxTree;
 
 	public MinMaxAlgorithm(Graph<NodeMinMaxValue<T>> minMaxTree) {
 		this.minMaxTree = minMaxTree;
 	}
 
+	/**
+	 * Generates the optimal play of both players.
+	 * 
+	 * @param rootNode
+	 * @param isMaxOnTurn
+	 * @return
+	 */
 	public List<NodeMinMaxValue<T>> execute(NodeMinMaxValue<T> rootNode,
 			boolean isMaxOnTurn) {
 		generateValue(rootNode, isMaxOnTurn);
 		return generateMinMaxPath(rootNode, isMaxOnTurn);
 	}
 
+	/**
+	 * Generates the values of all nodes of the tree.
+	 * 
+	 * @param rootNode
+	 * @param isMaxTurn
+	 * @return
+	 */
 	private int generateValue(NodeMinMaxValue<T> rootNode, boolean isMaxTurn) {
 		List<NodeMinMaxValue<T>> children = minMaxTree
 				.getNeighborNodes(rootNode);
@@ -41,12 +67,19 @@ public class MinMaxAlgorithm<T> {
 		return value;
 	}
 
-	private List<NodeMinMaxValue<T>> generateMinMaxPath(NodeMinMaxValue<T> rootNode,
-			boolean isMaxOnTurn) {
+	/**
+	 * Generates the best path for both players.
+	 * 
+	 * @param rootNode
+	 * @param isMaxOnTurn
+	 * @return
+	 */
+	private List<NodeMinMaxValue<T>> generateMinMaxPath(
+			NodeMinMaxValue<T> rootNode, boolean isMaxOnTurn) {
 		List<NodeMinMaxValue<T>> minMaxPath = new ArrayList<NodeMinMaxValue<T>>();
 		NodeMinMaxValue<T> currentNode = rootNode;
 		minMaxPath.add(currentNode);
-		
+
 		List<NodeMinMaxValue<T>> children = minMaxTree
 				.getNeighborNodes(currentNode);
 		Comparator<NodeMinMaxValue<T>> comparator = (NodeMinMaxValue<T> o1,

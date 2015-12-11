@@ -1,5 +1,13 @@
 package minmax;
 
+/**
+ * Represents a node of the minmax tree. It also contains value, so the minmax
+ * algorithm can pick the best moves.
+ * 
+ * @author petar
+ *
+ * @param <T>
+ */
 public class NodeMinMaxValue<T> {
 
 	private int value;
